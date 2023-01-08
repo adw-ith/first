@@ -1,0 +1,78 @@
+{% extends 'Main.html' %} {% block content %}
+<main class="layout">
+  <div class="container">
+    <div class="layout__box">
+      <div class="layout__boxHeader">
+        <div class="layout__boxTitle">
+          <a href="{% url 'home' %}">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+            >
+              <title>arrow-left</title>
+              <path
+                d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z"
+              ></path>
+            </svg>
+          </a>
+          <h3>Recent Activities</h3>
+        </div>
+      </div>
+
+      <div class="activities-page layout__body">
+        {% for message in room_messages %}
+  <div class="activities__box">
+    <div class="activities__boxHeader roomListRoom__header">
+      <a
+        href="{% url 'user-profile' message.user.id %}"
+        class="roomListRoom__author"
+      >
+        <div class="avatar avatar--small">
+          <img src="{{room.host.avatar.url}}" />
+        </div>
+        <p>
+          @{{message.user.username}}
+          <span>{{message.created|timesince}} ago</span>
+        </p>
+      </a>
+      {% if request.user == message.user %}
+      <div class="roomListRoom__actions">
+        <a href="{% url 'delete-message' message.id %}">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            class="bi bi-trash"
+            viewBox="0 0 16 16"
+          >
+            <title>remove</title>
+            <path
+              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+            />
+          </svg>
+        </a>
+      </div>
+      {% endif %}
+    </div>
+    <div class="activities__boxContent">
+      <p>
+        replied to post “<a href="{% url 'room' message.room.id %}"
+          >{{message.room.name}}</a
+        >”
+      </p>
+      <div class="activities__boxRoomContent">{{message.body}}</div>
+    </div>
+   </div>
+   {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}
